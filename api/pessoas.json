@@ -1,1 +1,16 @@
-[]
+[
+    {
+        "nome": "Michel Fernandes Lemes",
+        "cpf": "140.572.483-19",
+        "idade": "22",
+        "peso": "79",
+        "altura": "173"
+    },
+    {
+        "nome": "Michel Lemes",
+        "cpf": "140.572.483-93",
+        "idade": "22",
+        "peso": "79",
+        "altura": "173"
+    }
+]

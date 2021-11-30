@@ -3,6 +3,16 @@ const express = require('express');
 const app = express();
 const port = 3000;
 
+const cors=require("cors");
+
+const corsOptions = {
+   origin:'*', 
+   credentials:true,
+   optionSuccessStatus:200,
+}
+
+app.use(cors(corsOptions)) // Use this after the variable declaration
+
 // CAMINHO DOS ARQUIVOS
 const path_json = "./pessoas.json";
 
@@ -77,12 +87,12 @@ function put_person(req) {
 }
 
 // REMOVER PESSOA
-function delete_pessoa(nome) {
+function delete_pessoa(cpf) {
     let persons = require(path_json);
 
     const position = persons.map(element => {
-        return element.nome;
-    }).indexOf(nome);
+        return element.cpf;
+    }).indexOf(cpf);
 
     persons.splice(position, 1)
     save(persons);
@@ -94,7 +104,6 @@ function delete_pessoa(nome) {
 
 // ROTA PARA ADICIONAR UMA NOVA PESSOA
 app.post("/pessoa", (req, res) => {
-    archive(path_json, "[]");
     res.send(post_person(req.body));
 });
 
@@ -114,8 +123,8 @@ app.put("/:nome/", (req, res) => {
 });
 
 // ROTA PARA DELETAR PESSOA
-app.delete("/:nome/", (req, res) => {
-    res.send(delete_pessoa(req.params.nome));
+app.delete("/:cpf/", (req, res) => {
+    res.send(delete_pessoa(req.params.cpf));
 });
 
 app.listen(port, () => {
