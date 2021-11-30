@@ -83,7 +83,7 @@ function delete_pessoa(nome) {
     const position = persons.map(element => {
         return element.nome;
     }).indexOf(nome);
-    
+
     persons.splice(position, 1)
     save(persons);
 
@@ -121,6 +121,5 @@ app.delete("/:nome/", (req, res) => {
 app.listen(port, () => {
     console.log(`A API NodeJS está rodando na porta (${port}).`);
 });
-
 
 archive(path_json, "[]");
