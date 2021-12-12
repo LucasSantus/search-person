@@ -8,47 +8,38 @@ import {
   StyleSheet,
   TouchableOpacity,
   Text,
-  Dimensions
+  Dimensions,
+  StatusBar
 } from 'react-native';
-import { StatusBar } from 'expo-status-bar';
 import results from '../../results'
 import ListItem from '../components/ListItem'
 
 export default function Home({navigation}) {
-    const [searchText, setSearchText] = useState('');
     const [pessoas, setPessoas] = useState([]);
-    
-    useEffect(() => {
-        if (searchText === '') {
-            setPessoas(results);
-        }
-        else {
-            setPessoas(
-                results.filter(
-                (item) => {
-                    item.nome.toLowerCase().indexOf(searchText.toLowerCase().toString()) > -1
-                })
-            );
 
-            // ApiService.get("/pessoas")
-            //     .then((response) => setPessoas(response.data))
-            //     .catch((err) => {
-            //         console.error("ops! ocorreu um erro" + err);
-            //     });
-        }
-    }, [searchText]);
+    useEffect(() => {
+        setPessoas(results);
+    }, []);
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.search}>
+            <StatusBar 
+                barStyle="light-content"
+                backgroundColor="transparent"
+                translucent
+            />
+            <TouchableOpacity
+                style={styles.search}
+                onPress={ () => navigation.navigate("Search", { navigation })}
+            >
                 <TextInput
                     style={styles.input}
                     placeholder="Pesquisar..."
                     placeholderTextColor="#888"
-                    value={searchText}
-                    onChangeText={(t) => setSearchText(t)}
+                    editable={false} 
+                    selectTextOnFocus={false}
                 />
-            </View>
+            </TouchableOpacity>
 
             {pessoas.length > 0 ? (
                 <FlatList
@@ -65,25 +56,10 @@ export default function Home({navigation}) {
                         No momento, não existem pessoas registradas!
                     </Text>
                 </View>
-                
             )}
         <StatusBar style="light" />
         </SafeAreaView>
     );
-
-    // <View style={styles.container}>
-    //     <Text>Hello World!!</Text>
-    //     <Button
-    //         title="Detail"
-    //         onPress={ () => navigation.navigate("Detail")}
-    //     />
-
-    //     <Button
-    //         title="Detail"
-    //         onPress={ () => navigation.navigate("Detail")}
-    //     />
-    // </View>
-  
 }
 
 const styles = StyleSheet.create({

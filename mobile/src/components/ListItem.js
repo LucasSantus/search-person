@@ -3,24 +3,14 @@ import { TouchableOpacity, View, Image, Text, StyleSheet, Dimensions } from 'rea
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const ListItem = ({ navigation, data }) => {
-    function handleDelete(cpf){
-        console.log(`${cpf} foi deletado!`)
-        // ApiService.delete("/pessoas")
-        //         .then((response) => setPessoas(response.data))
-        //         .catch((err) => {
-        //             console.error("ops! ocorreu um erro" + err);
-        //         });
-    }
-
     return (
         <TouchableOpacity 
             style={styles.item}
-            onPress={ () => navigation.navigate("Detail", { data })}
+            onPress={ () => navigation.navigate("Detail", { navigation, data })}
         >
             <View style={styles.itemInfo}>
-                <View style={styles.itemSEILA}>
-                    <Text style={styles.itemP1}>{data.nome}</Text>
-                    <TouchableOpacity 
+                
+                    {/* <TouchableOpacity 
                         style={styles.orderButton}
                         onPress={handleDelete(data.cpf)} 
                     >
@@ -29,9 +19,12 @@ const ListItem = ({ navigation, data }) => {
                             size={28}
                             color="red"
                         />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
+                
+                <View style={styles.itemText}>
+                    <Text style={styles.itemP1}>{data.nome}</Text>
+                    <Text style={styles.itemP2}>{data.cpf}</Text>
                 </View>
-                <Text style={styles.itemP2}>{data.idade} anos - {data.cpf}</Text>
             </View>
         </TouchableOpacity>
     );
@@ -51,9 +44,9 @@ const styles = StyleSheet.create({
     itemSEILA:{
         flex: 1,
         flexDirection: 'row',
-        width: Dimensions.get('window').width * 0.75,
-        justifyContent: 'space-between',
-        alignItems: 'stretch',
+        alignContent: 'space-between',
+        width: Dimensions.get('window').width * 0.85,
+        paddingHorizontal: Dimensions.get('window').width * 0.2/4,
     },
 
     orderButton:{
@@ -66,18 +59,29 @@ const styles = StyleSheet.create({
         height: 50,
         borderRadius: 30,
     },
+    itemText: {
+        flex: 1,
+        alignSelf: 'flex-start',
+        paddingHorizontal: Dimensions.get('window').width * 0.2/4,
+    },
 
     itemInfo: {
-        marginLeft: 20,
+        flex: 1,
+        alignItems: 'center',
     },
     itemP1: {
+        flex: 1,
+        alignSelf: 'flex-start',
         fontSize: 22,
         color: '#FFFFFF',
         marginBottom: 5
     },
     itemP2: {
+        flex: 1,
+        alignSelf: 'flex-start',
         fontSize: 18,
         color: '#999999',
+        
     },
 });
 
