@@ -3,51 +3,36 @@ import {
     StyleSheet,
     View,
     TextInput,
-    Button,
     Dimensions,
+    SafeAreaView,
+    Text,
+    FlatList,
+    TouchableOpacity,
 } from 'react-native';
-import HeaderDetail from '../components/HeaderDetail';
+import HeaderSearch from '../components/HeaderSearch';
 import colors from '../themes/theme';
-import results from '../../results'
+import ListItem from '../components/ListItem';
+
+import { ApiService } from '../services/ApiService';
 
 export default function Search({navigation}) {
     const [pessoas, setPessoas] = useState([]);
-    const [text, setText] = useState();
-    let r = []
-
-    // const handleBuscar = () => {
-    //     ApiService.get(`/pessoas/nome/${nome}`)
-    //         .then(response => {
-    //             setPessoas(response.data);
-    //         })
-    // };
+    const [text, setText] = useState('');
 
     function handleSearchName(){
-        // r = pessoas.filter((item) => {
-        //     return item.nome === text;
-        // })
-        console.log("nome")
-        console.log(pessoas)
+        ApiService
+            .get(`/${text}/`)
+            .then((response) => {
+                setPessoas(response.data);
+            })
+            .catch((err) => {
+                alert("ops! ocorreu um erro" + err);
+            });
     }
-
-    function handleSearchCPF(){
-        // sethihi(
-        //     results.filter(
-        //     (item) => {
-        //         item.cpf.indexOf(text.toString()) > -1
-        //     })
-        // );
-        console.log("cpf")
-        console.log(hihi)
-    }
-
-    useEffect(() => {
-        setPessoas(results);
-    }, []);
 
     return (
         <SafeAreaView style={styles.container}>
-            <HeaderDetail navigation={navigation} title={"Search Person"} />
+            <HeaderSearch navigation={navigation} title={"Search Person"} />
 
             <View style={styles.search}>
                 <TextInput
@@ -57,23 +42,34 @@ export default function Search({navigation}) {
                     value={text}
                     onChangeText={(t) => setText(t)}
                 />
-                <View style={styles.buttons}>
-                    <Button 
-                        style={styles.button} 
-                        color={colors.button}
-                        title={"Pesquisar p/ Nome"}
-                        onPress={() => handleSearchName()}
-                    />
-
-                    <Button 
-                        style={styles.button} 
-                        color={colors.button}
-                        title={"Pesquisar p/ CPF"}
-                        onPress={() => handleSearchCPF()}
-                    />
-                </View>
             </View>
-        </View>
+
+            <TouchableOpacity
+                style={styles.floatingButton}
+                onPress={ () => handleSearchName()}
+            >
+                <Text style={styles.textButton}>Pesquisar</Text>
+            </TouchableOpacity>
+
+            <View style={styles.item}>
+                {pessoas.length > 0 ? (
+                    <FlatList
+                        data={pessoas}
+                        style={styles.list}
+                        renderItem={({ item }) => <ListItem navigation={navigation} data={item} />}
+                        keyExtractor={(item) => item.cpf}
+                    />
+                ) : (
+                    <View 
+                        style={styles.body}
+                    >
+                        <Text style={styles.text}>
+                            Insira os dados para realizar a pesquisa!
+                        </Text>
+                    </View>
+                )}
+            </View>
+        </SafeAreaView>
     );
 }
 
@@ -91,38 +87,41 @@ const styles = StyleSheet.create({
     },
     input: {
         flex: 1,
-        height: 50,
-        backgroundColor: '#363636',
+        minHeight: 50,
+        backgroundColor: colors.backgroundInput,
         borderRadius: 5,
         padding: 15,
         minWidth: 150,
         fontSize: 19,
-        color: '#FFFFFF',
+        color: colors.clear,
         width: Dimensions.get('window').width * 0.8
     },
-
-    buttons: {
-        flex: 1,
-        flexDirection: 'row',
-        width: Dimensions.get('window').width * 0.8
+    textButton: {
+        fontSize: 17,
+        fontWeight: 'bold',
+        color: colors.text_secondary
     },
-
-    button: {
-        backgroundColor: colors.button,
-
-    },
-
-
-
-    column: {
-        flexDirection: 'column',
+    floatingButton: {
         padding: 15,
+        borderRadius: 5,
+        alignSelf: 'flex-end',
+        backgroundColor: "#DDDDDD",
+        marginEnd: Dimensions.get('window').width * 0.2/2,
     },
+    item: {
+        flex: 1,
+        justifyContent: 'center',
+        width: Dimensions.get('window').width,
+    }, 
     text:{
         fontSize: 18,
         fontWeight: 'bold',
         color: colors.clear,
+        textAlign: 'center',
         marginTop: 15,
     },
-    
+    list: {
+        flex: 1,
+        width: Dimensions.get('window').width,
+    },
 });

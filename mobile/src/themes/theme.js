@@ -1,4 +1,9 @@
 export default {
+    background: '#262627',
+
+    placeholderInput: '#888',
+    backgroundInput: '#363636',
+
     bg_primary: '#262627',
     bg_secondary: '#282829',
 

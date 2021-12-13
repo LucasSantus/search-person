@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 import HeaderDetail from '../components/HeaderDetail';
 import TextInputDisabled from '../components/TextInputDIsabled';
+
 import colors from '../themes/theme';
 
 export default function Detail({navigation, route}) {
@@ -56,28 +57,20 @@ export default function Detail({navigation, route}) {
 
     return (
         <View style={styles.container}>
-
-            <HeaderDetail navigation={navigation} title={route.params?.data.nome} />
-
+            <HeaderDetail navigation={navigation} data={route.params?.data} />
             <View style={styles.column}>
                 <Text style={styles.text}>Nome: </Text>
                 <TextInputDisabled data={route.params?.data.nome} />
-
                 <Text style={styles.text}>CPF: </Text>
                 <TextInputDisabled data={route.params?.data.cpf} />
-
                 <Text style={styles.text}>Idade: </Text>
                 <TextInputDisabled data={route.params?.data.idade} />
-
                 <Text style={styles.text}>Peso: </Text>
                 <TextInputDisabled data={route.params?.data.peso} />
-
                 <Text style={styles.text}>Altura: </Text>
                 <TextInputDisabled data={route.params?.data.altura} />
-
                 <Text style={styles.text}>IMC: </Text>
                 <TextInputDisabled data={IMC} />
-
                 <Text style={styles.text}>Grau IMC: {handleGrau(IMC)}</Text>
             </View>
         </View>
@@ -101,5 +94,4 @@ const styles = StyleSheet.create({
         color: colors.clear,
         marginTop: 15,
     },
-    
 });

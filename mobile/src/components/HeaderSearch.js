@@ -2,19 +2,8 @@ import React from 'react';
 import { TouchableOpacity, View, Text, StyleSheet, Dimensions } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import colors from '../themes/theme'
-import { ApiService } from '../services/ApiService';
 
-const HeaderDetail = ({ navigation, data }) => {
-    function handleDelete(cpf){
-        ApiService
-            .delete(`/${cpf}/`)
-            .then(res => {
-                navigation.navigate('Home');
-            })
-            .catch(err => {
-                console.log(err);
-            });
-    }
+const HeaderSearch = ({ navigation, title }) => {
     return (
         <View style={styles.container}>
             <View style={styles.title}>
@@ -28,19 +17,7 @@ const HeaderDetail = ({ navigation, data }) => {
                         color={colors.text_secondary}
                     />
                 </TouchableOpacity>
-                <Text style={styles.text}>{data.nome}</Text>
-            </View>
-            <View style={styles.iconDelete}>
-                <TouchableOpacity
-                    style={styles.icon}
-                    onPress={ () => {handleDelete(data.cpf)}}
-                >
-                    <MaterialCommunityIcons
-                        name="delete"
-                        size={32}
-                        color='red'
-                    />
-                </TouchableOpacity>
+                <Text style={styles.text}>{title}</Text>
             </View>
         </View>
     );
@@ -54,14 +31,17 @@ const styles = StyleSheet.create({
         width: Dimensions.get('window').width,
         borderBottomEndRadius: 20,
         borderBottomStartRadius: 20,
-        minHeight: 70,
+        maxHeight: 80,
         backgroundColor: '#FFF',
         justifyContent: 'space-between',
         alignItems: 'center',
     },
     title:{
         flexDirection: 'row',
-        justifyContent: 'center',
+        alignSelf: 'flex-start',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingTop: 20,
     },
     icon:{
         paddingStart: Dimensions.get('window').width * 0.05/2
@@ -72,12 +52,6 @@ const styles = StyleSheet.create({
         marginBottom: 5,
         paddingTop: 7,
     },
-    iconDelete: {
-        paddingEnd: Dimensions.get('window').width * 0.07/2,
-        alignItems: 'flex-end',
-        justifyContent: 'center'
-        
-    },
 });
 
-export default HeaderDetail;
+export default HeaderSearch;

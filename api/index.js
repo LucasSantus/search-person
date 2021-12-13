@@ -70,6 +70,7 @@ function get_person(nome) {
     persons = persons.filter(element => {
         return element.nome == nome;
     });
+    console.log("AAAAAAAAAAAAAAAAAAAA")
     return persons;
 }
 

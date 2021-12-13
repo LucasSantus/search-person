@@ -11,14 +11,20 @@ import {
   Dimensions,
   StatusBar
 } from 'react-native';
-import results from '../../results'
 import ListItem from '../components/ListItem'
+import { ApiService } from '../services/ApiService';
+import colors from '../themes/theme'
 
 export default function Home({navigation}) {
     const [pessoas, setPessoas] = useState([]);
 
     useEffect(() => {
-        setPessoas(results);
+        ApiService
+            .get("/pessoas")
+            .then((response) => setPessoas(response.data))
+            .catch((err) => {
+                alert("ops! ocorreu um erro" + err);
+            });
     }, []);
 
     return (
@@ -28,6 +34,7 @@ export default function Home({navigation}) {
                 backgroundColor="transparent"
                 translucent
             />
+
             <TouchableOpacity
                 style={styles.search}
                 onPress={ () => navigation.navigate("Search", { navigation })}
@@ -35,10 +42,17 @@ export default function Home({navigation}) {
                 <TextInput
                     style={styles.input}
                     placeholder="Pesquisar..."
-                    placeholderTextColor="#888"
+                    placeholderTextColor={colors.placeholderInput}
                     editable={false} 
                     selectTextOnFocus={false}
                 />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+                style={styles.floatingButton}
+                onPress={ () => navigation.navigate("Create", { navigation })}
+            >
+                <Text style={styles.textButton}>Registrar</Text>
             </TouchableOpacity>
 
             {pessoas.length > 0 ? (
@@ -46,7 +60,7 @@ export default function Home({navigation}) {
                     data={pessoas}
                     style={styles.list}
                     renderItem={({ item }) => <ListItem navigation={navigation} data={item} />}
-                    keyExtractor={(item) => item.id}
+                    keyExtractor={(item) => item.cpf}
                 />
             ) : (
                 <View 
@@ -57,7 +71,6 @@ export default function Home({navigation}) {
                     </Text>
                 </View>
             )}
-        <StatusBar style="light" />
         </SafeAreaView>
     );
 }
@@ -65,7 +78,7 @@ export default function Home({navigation}) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#242425'
+        backgroundColor: colors.background
     },
     search: {
         flexDirection: 'row',
@@ -75,49 +88,38 @@ const styles = StyleSheet.create({
     input: {
         flex: 1,
         height: 50,
-        backgroundColor: '#363636',
+        backgroundColor: colors.backgroundInput,
         borderRadius: 5,
         padding: 15,
         minWidth: 150,
         fontSize: 19,
-        color: '#FFFFFF',
+        color: colors.clear,
         width: Dimensions.get('window').width * 0.8
     },
-
     body: {
         flex: 1,
-        color: 'white',
+        color: colors.clear,
         textAlign: 'center',
         justifyContent: 'center',
         alignItems: 'center'
     },
-
     text: {
-        color: '#FFF',
+        color: colors.clear,
         fontSize: 16,
         paddingHorizontal: Dimensions.get('window').width * 0.2,
     }, 
-
-
-
-
-
-    
-
-    positionTitle:{
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        paddingTop: 5,
-        paddingHorizontal: (Dimensions.get('window').width * 0.2) / 2,
+    textButton: {
+        fontSize: 17,
+        fontWeight: 'bold',
+        color: colors.text_secondary
     },
-    title: {
-        fontSize: 32,
+    floatingButton: {
+        padding: 15,
+        borderRadius: 5,
+        alignSelf: 'flex-end',
+        backgroundColor: "#DDDDDD",
+        marginEnd: Dimensions.get('window').width * 0.2/2,
     },
-    subtitle: {
-        fontSize: 32,
-        lineHeight: 40
-    }, 
-    
     list: {
         flex: 1,
     },
